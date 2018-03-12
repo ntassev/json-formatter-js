@@ -27,6 +27,7 @@ export interface JSONFormatterConfiguration {
   theme?: string;
   useToJSON?: boolean;
   sortPropertiesBy?: (a: string, b: string) => number;
+  explicitConstructorName?: string;
 };
 
 const _defaultConfig: JSONFormatterConfiguration = {
@@ -37,7 +38,8 @@ const _defaultConfig: JSONFormatterConfiguration = {
   animateClose: true,
   theme: null,
   useToJSON: true,
-  sortPropertiesBy: null
+  sortPropertiesBy: null,
+  explicitConstructorName: null
 };
 
 
@@ -97,6 +99,9 @@ export default class JSONFormatter {
     }
     if (this.config.useToJSON === undefined) {
       this.config.useToJSON = _defaultConfig.useToJSON;
+    }
+    if (this.config.explicitConstructorName === undefined) {
+      this.config.explicitConstructorName = _defaultConfig.explicitConstructorName;
     }
   }
 
@@ -185,6 +190,7 @@ export default class JSONFormatter {
    * if this is an object, get constructor function name
   */
   private get constructorName(): string {
+    if (this.config.explicitConstructorName && this.key === undefined) { return this.config.explicitConstructorName; }
     return getObjectName(this.json);
   }
 
